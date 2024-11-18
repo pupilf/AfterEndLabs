@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.BrandMapper">
+    <resultMap id="brandResultMap" type="POJO.Brand">
+        <result property="brandName" column="brand_name"></result>
+        <result property="companyName" column="company_name"></result>
+    </resultMap>
+
+    <select id="selectByCondition" resultMap="brandResultMap">
+        select *from labs.tb_brand
+        <where>
+            <if test="brandName!=null and brandName!=''">
+                brand_name like #{brandName}
+            </if>
+            <if test="status!=null and status!=''">
+                <if test="brandName!=null and brandName!=''">
+                    and
+                </if>
+                status=#{status}
+            </if>
+        </where>
+    </select>
+
+    <delete id="batchRemove">
+        delete from labs.tb_brand
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
